@@ -1,0 +1,15 @@
+{
+  "themeName": "THREAD Dark",
+  "version": "1.0",
+  "platform": "x86_64",
+  "baseBackground": "#0B0D12",
+  "panelBackground": "#121821",
+  "surfaceBackground": "#1A212C",
+  "accent": "#7BB7FF",
+  "accentStrong": "#8AE3C5",
+  "textPrimary": "#EAF1FF",
+  "textSecondary": "#9AA7B7",
+  "border": "#273244",
+  "warning": "#F5B75B",
+  "danger": "#F26C6C"
+}

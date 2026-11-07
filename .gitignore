@@ -1,0 +1,12 @@
+THREAD.iso
+*.iso
+build/
+iso_root/
+out/
+workspace/
+*.qcow2
+*.img
+*.raw
+*.vmdk
+*.log
+*.tmp
