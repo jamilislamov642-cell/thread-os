@@ -1,75 +1,74 @@
-# THREAD OS
+<div align="center">
+  <img src="assets/thread-logo.svg" width="132" alt="THREAD OS logo" />
+  <h1>THREAD OS</h1>
+  <p><strong>Your computer. Your rules. Your system.</strong></p>
+  <p>A Linux-based x86_64 OS project focused on freedom, customization, productivity, and user control.</p>
 
-THREAD OS 1.0 is a Linux-based x86_64 operating system platform designed for productivity, privacy, and user control. This repository contains the foundation for a real, installable operating system using a Linux kernel base, a GRUB bootloader for BIOS and UEFI, a custom desktop identity layer, an installer workflow, and a reproducible ISO build pipeline.
+  <a href="README.md"><img alt="English" src="https://img.shields.io/badge/🇬🇧_English-0B0D12?style=for-the-badge&logoColor=white"></a>
+  <a href="README.ru.md"><img alt="Русский" src="https://img.shields.io/badge/🇷🇺_Русский-0B0D12?style=for-the-badge&logoColor=white"></a>
+  <a href="README.de.md"><img alt="Deutsch" src="https://img.shields.io/badge/🇩🇪_Deutsch-0B0D12?style=for-the-badge&logoColor=white"></a>
+  <a href="README.az.md"><img alt="Azərbaycan dili" src="https://img.shields.io/badge/🇦🇿_Azərbaycanca-0B0D12?style=for-the-badge&logoColor=white"></a>
 
-## Project identity
+  <br><br>
+  <a href="#-project-status"><img alt="Project status" src="https://img.shields.io/badge/status-early%20development-7BB7FF?style=for-the-badge"></a>
+  <a href="ARCHITECTURE.md"><img alt="Architecture" src="https://img.shields.io/badge/architecture-Linux%20%2B%20THREAD-8AE3C5?style=for-the-badge"></a>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-F5B75B?style=for-the-badge"></a>
+</div>
 
-Name: THREAD OS
-Developer and Founder: Jamil Islamov
-Website: https://jynza.cc
-Architecture: x86_64
-Bootloader: GRUB 2
-Primary goal: Freedom, customization, productivity, and user control.
+---
 
-## What this repository includes
+## ✦ Welcome to THREAD
 
-- Bootloader configuration and menu flow
-- Kernel strategy and hardware notes
-- Desktop environment plan
-- Native application architecture
-- System services and workspace persistence strategy
-- Installer workflow and disk safety rules
-- Build, validation, and QEMU testing scripts
-- ISO generation pipeline and USB imaging instructions
+THREAD OS is an ambitious operating-system project by **Jamil Islamov**. The first release is planned around the **Linux kernel**, **GRUB**, and a custom THREAD experience: desktop, applications, workspace tools, and installer.
 
-## Build target
+> **Honest status:** this repository is an early development foundation—not a finished operating system. There is currently no verified bootable installer image or tested desktop release. The existing ISO script requires a kernel and initramfs payload that are not included yet. No physical-hardware or QEMU boot test has been completed.
 
-The project is designed to produce a real bootable ISO named:
+## ✧ Explore THREAD
 
-```text
-THREAD.iso
-```
+| Get started | Project design | Help build it |
+|:--|:--|:--|
+| [**⚙ Build guide**](BUILD.md) · [**↗ Install guide**](INSTALL.md) | [**⌘ Architecture**](ARCHITECTURE.md) · [**◷ Roadmap**](ROADMAP.md) | [**✚ Contributing**](CONTRIBUTING.md) · [**☷ Issues**](https://github.com/jamilislamov642-cell/thread-os/issues) |
 
-The ISO is intended for:
-- Legacy BIOS boot
-- UEFI boot
-- USB flashing
-- SSD/HDD installation
-- VM testing with QEMU
+### Quick links
 
-## Repository layout
+[🚀 **Build**](BUILD.md) &nbsp; [📦 **Installation**](INSTALL.md) &nbsp; [🧭 **Architecture**](ARCHITECTURE.md) &nbsp; [🗺 **Roadmap**](ROADMAP.md) &nbsp; [🤝 **Contribute**](CONTRIBUTING.md) &nbsp; [🌐 **Website**](https://jynza.cc)
 
-- bootloader/ — GRUB bootloader configuration
-- kernel/ — Linux kernel strategy and config notes
-- desktop/ — desktop environment architecture
-- applications/ — native THREAD apps
-- system/ — system services and session management
-- drivers/ — hardware support and driver strategy
-- installer/ — installer workflow and boot safety design
-- filesystem/ — filesystem strategy
-- networking/ — network services and UI design
-- security/ — user, permissions, and update policy
-- themes/ — design system and theme configuration
-- assets/ — brand assets and logo
-- scripts/ — build and validation automation
-- tests/ — validation and smoke tests
-- documentation/ — technical docs and hardware notes
-- iso/ — output staging and ISO guidance
+## ◈ Project status
 
-## Why this is a realistic first release
+**Stage: early foundation.** The repository has project documentation, a preliminary GRUB configuration, branding, and starter scripts. These are not evidence of a working OS image: the current build script does not assemble a complete live system, and the menu configuration still needs a real kernel/initramfs and corrected live-boot behavior.
 
-This project intentionally chooses a Linux kernel foundation for the first 1.0 release. That is the most maintainable way to deliver a real, bootable, installable operating system in a single project while keeping a custom THREAD identity around the Linux base. The custom THREAD layer includes:
+| Area | Status |
+|:--|:--|
+| Linux-based x86_64 architecture | Planned and documented |
+| GRUB BIOS + UEFI boot | Configuration started; not boot-tested |
+| Kernel and initramfs payload | Not included |
+| Complete live root filesystem | Not implemented |
+| THREAD desktop and working apps | Planned; not implemented as a complete desktop |
+| Graphical installer and disk installation | Not implemented |
+| Reproducible, validated `THREAD.iso` | Not available yet |
+| QEMU / physical hardware verification | Not performed |
 
-- custom desktop environment
-- custom branding
-- application layer
-- installer flow
-- system services and workspace handling
-- release and update model
+Features in the roadmap are goals, not promises that they already work. We will update this table when implementation and testing provide evidence.
 
-## Quick start
+## ⌘ Technical direction
 
-From the repository root:
+The initial target is **x86_64** with a Linux kernel foundation and GRUB for Legacy BIOS and UEFI. The THREAD identity is intended to come from its own desktop experience, applications, settings, workspace features, visual design, and installation tooling—not from falsely claiming an independently developed kernel.
+
+Planned platform areas include:
+
+- **Boot:** GRUB, BIOS/UEFI paths, recovery and safe-graphics options.
+- **System:** Linux drivers, device discovery, storage, networking, accounts, and logs.
+- **Desktop:** a dark-first THREAD interface with launcher, panel, settings, notifications, and workspace restore.
+- **Applications:** Files, Settings, Terminal, Browser, Store, Notes, Monitor, Network, Security, Update Center, Recovery, and Workspace.
+- **Installer:** explicit disk selection, manual/guided partitioning, and confirmation before destructive changes.
+
+See [ARCHITECTURE.md](ARCHITECTURE.md) for the design and [ROADMAP.md](ROADMAP.md) for the staged plan.
+
+## 🛠 Build status and developer setup
+
+The current scripts are **starter tooling**, not a working ISO pipeline. Do not use the generated image (if one is produced) to install a computer or overwrite a USB drive. Required kernel/root-filesystem integration, live boot, installer implementation, and boot tests remain outstanding.
+
+Review [BUILD.md](BUILD.md) for current requirements and limitations. The repository's current script entry points are:
 
 ```bash
 ./scripts/build_iso.sh
@@ -77,27 +76,46 @@ From the repository root:
 ./scripts/qemu_test.sh
 ```
 
-## Installation
+Running these does **not** establish that the OS boots. A release must only be called bootable after producing the full image and validating BIOS and UEFI boot in a test environment.
 
-See INSTALL.md for the installation instructions and USB creation flow.
+## 🗂 Repository map
 
-## Build guide
+```text
+bootloader/   GRUB configuration and boot notes
+kernel/       Linux kernel strategy and configuration notes
+desktop/      THREAD desktop design
+applications/ application concepts and implementation notes
+system/       service and workspace design
+drivers/      hardware support strategy
+installer/    installer planning
+filesystem/   filesystem and disk layout design
+networking/   networking design
+security/     security model
+themes/       visual theme configuration
+assets/       brand assets
+scripts/      build and test scripts
+tests/        validation notes
+documentation/technical documentation
+iso/          ISO staging notes
+```
 
-See BUILD.md for environment requirements and the ISO build process.
+## 🧵 Project principles
 
-## Architecture guide
+1. **Real over theatrical:** no mock interface presented as system functionality.
+2. **Honest claims:** document what is implemented and what has actually been tested.
+3. **User control:** make risky disk and bootloader operations explicit and consent-based.
+4. **Maintainable foundations:** build on established Linux components before attempting kernel independence.
+5. **Accessible customization:** make the system's appearance and behavior adaptable.
 
-See ARCHITECTURE.md for the system design and module breakdown.
+## 🤝 Contribute
 
-## Roadmap
+Contributions and constructive feedback are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md), then browse [open issues](https://github.com/jamilislamov642-cell/thread-os/issues) or [create an issue](https://github.com/jamilislamov642-cell/thread-os/issues/new/choose). Please report test environment and exact results; do not describe an untested feature as working.
 
-See ROADMAP.md for the planned development phases.
+## About
 
-## Licensing
+**THREAD OS** · Founder: **Jamil Islamov** · [jynza.cc](https://jynza.cc) · [MIT License](LICENSE)
 
-This project is licensed under the MIT License.
-
-## Developer and founder
-
-Jamil Islamov
-https://jynza.cc
+<div align="center">
+  <sub>Built with a clear roadmap, open development, and no pretend progress.</sub><br>
+  <a href="#-welcome-to-thread">↑ Back to top</a>
+</div>
