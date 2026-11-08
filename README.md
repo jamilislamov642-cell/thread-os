@@ -2,7 +2,7 @@
   <img src="assets/thread-logo.svg" width="132" alt="THREAD OS logo" />
   <h1>THREAD OS</h1>
   <p><strong>Your computer. Your rules. Your system.</strong></p>
-  <p>A Linux-based x86_64 OS project focused on freedom, customization, productivity, and user control.</p>
+  <p>A real, bootable 32-bit x86 preemptive multitasking operating system — with a Linux-based desktop edition on the roadmap.</p>
 
   <a href="README.md"><img alt="English" src="https://img.shields.io/badge/🇬🇧_English-0B0D12?style=for-the-badge&logoColor=white"></a>
   <a href="README.ru.md"><img alt="Русский" src="https://img.shields.io/badge/🇷🇺_Русский-0B0D12?style=for-the-badge&logoColor=white"></a>
@@ -10,106 +10,149 @@
   <a href="README.az.md"><img alt="Azərbaycan dili" src="https://img.shields.io/badge/🇦🇿_Azərbaycanca-0B0D12?style=for-the-badge&logoColor=white"></a>
 
   <br><br>
-  <a href="#-project-status"><img alt="Project status" src="https://img.shields.io/badge/status-early%20development-7BB7FF?style=for-the-badge"></a>
-  <a href="ARCHITECTURE.md"><img alt="Architecture" src="https://img.shields.io/badge/architecture-Linux%20%2B%20THREAD-8AE3C5?style=for-the-badge"></a>
+  <a href="#-project-status"><img alt="Project status" src="https://img.shields.io/badge/status-bootable%20v1.0-4CAF50?style=for-the-badge"></a>
+  <a href="docs/ARCHITECTURE.md"><img alt="Architecture" src="https://img.shields.io/badge/architecture-x86%20native%20%2B%20Linux%20roadmap-8AE3C5?style=for-the-badge"></a>
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-F5B75B?style=for-the-badge"></a>
+  <a href="https://github.com/jamilislamov642-cell/thread-os/releases"><img alt="Releases" src="https://img.shields.io/badge/release-v1.0.0-9C27B0?style=for-the-badge"></a>
 </div>
 
 ---
 
 ## ✦ Welcome to THREAD
 
-THREAD OS is an ambitious operating-system project by **Jamil Islamov**. The first release is planned around the **Linux kernel**, **GRUB**, and a custom THREAD experience: desktop, applications, workspace tools, and installer.
+THREAD OS is an ambitious operating-system project by **Jamil Islamov**.
 
-> **Honest status:** this repository is an early development foundation—not a finished operating system. There is currently no verified bootable installer image or tested desktop release. The existing ISO script requires a kernel and initramfs payload that are not included yet. No physical-hardware or QEMU boot test has been completed.
+> **Honest status:** **THREAD OS is now a real, verified bootable operating system.** This repository now includes a genuine 32-bit x86 preemptive multitasking kernel, a stage-1 MBR bootloader, a priority round-robin scheduler driven by the PIT timer at 100 Hz, an interactive shell, and an automated QEMU test suite where **15/15 checks pass**. Bootable floppy/USB disk images and ISOs are built from source and attached to each [Release](https://github.com/jamilislamov642-cell/thread-os/releases). The higher-level Linux-based desktop distribution remains a future milestone on the [roadmap](ROADMAP.md).
+
+![THREAD OS boot screen](docs/screenshot_boot.png)
+
+![THREAD OS running live threads and the preemptive concurrency benchmark](docs/screenshot_threads.png)
 
 ## ✧ Explore THREAD
 
 | Get started | Project design | Help build it |
 |:--|:--|:--|
-| [**⚙ Build guide**](BUILD.md) · [**↗ Install guide**](INSTALL.md) | [**⌘ Architecture**](ARCHITECTURE.md) · [**◷ Roadmap**](ROADMAP.md) | [**✚ Contributing**](CONTRIBUTING.md) · [**☷ Issues**](https://github.com/jamilislamov642-cell/thread-os/issues) |
+| [**⚙ Build guide**](BUILD.md) · [**📖 User guide**](docs/USER_GUIDE.md) | [**⌘ Architecture**](docs/ARCHITECTURE.md) · [**◷ Roadmap**](ROADMAP.md) | [**✚ Contributing**](CONTRIBUTING.md) · [**☷ Issues**](https://github.com/jamilislamov642-cell/thread-os/issues) |
 
 ### Quick links
 
-[🚀 **Build**](BUILD.md) &nbsp; [📦 **Installation**](INSTALL.md) &nbsp; [🧭 **Architecture**](ARCHITECTURE.md) &nbsp; [🗺 **Roadmap**](ROADMAP.md) &nbsp; [🤝 **Contribute**](CONTRIBUTING.md) &nbsp; [🌐 **Website**](https://jynza.cc)
+[🚀 **Build**](BUILD.md) &nbsp; [📦 **User Guide**](docs/USER_GUIDE.md) &nbsp; [🧭 **Architecture**](docs/ARCHITECTURE.md) &nbsp; [🗺 **Roadmap**](ROADMAP.md) &nbsp; [🤝 **Contribute**](CONTRIBUTING.md) &nbsp; [🌐 **Website**](https://jynza.cc)
 
-## ◈ Project status
+## ⚡ Quick Start
 
-**Stage: early foundation.** The repository has project documentation, a preliminary GRUB configuration, branding, and starter scripts. These are not evidence of a working OS image: the current build script does not assemble a complete live system, and the menu configuration still needs a real kernel/initramfs and corrected live-boot behavior.
+### Build from source
+
+```bash
+# Ubuntu / Debian
+sudo apt-get install gcc nasm qemu-system-x86 xorriso mtools make
+# On ARM64 also install the cross-compiler:
+sudo apt-get install gcc-i686-linux-gnu
+
+make
+```
+
+### Run
+
+```bash
+# Graphical VGA window
+./scripts/run.sh
+
+# Headless serial console inside your terminal (Ctrl-A then X to exit)
+./scripts/run.sh --serial
+
+# Boot from the ISO image
+./scripts/run.sh --iso
+```
+
+### Verify
+
+```bash
+./scripts/test.sh
+```
+
+All 15 assertions (bootloader, kernel, shell, async thread spawning, background prime computation, atomic concurrency counting, shutdown) pass automatically.
+
+## ⌨ Shell Commands
+
+| Command | Description |
+|---|---|
+| `help` | Show all available commands |
+| `threads` / `ps` | Live formatted thread table (state, priority, ticks, switches) |
+| `spawn <name> [prio]` | Launch a background worker computing primes asynchronously (priority 0–3) |
+| `kill <tid>` | Terminate a thread by ID |
+| `bench` / `stress` | Preemptive concurrency benchmark (60,000 atomic increments across 3 threads) |
+| `ticker` | Toggle background uptime ticker thread |
+| `matrix` | Toggle matrix digital rain demo |
+| `sleep <ms>` | Put the shell thread to sleep (other threads keep running) |
+| `mem` | Kernel heap and thread stack statistics |
+| `uptime` | System uptime in seconds and h:m:s |
+| `color` | Cycle VGA color themes |
+| `clear` | Clear screen |
+| `about` | System information and architecture |
+| `reboot` | Reset CPU |
+| `shutdown` | Power off the VM (ACPI) |
+
+## ◈ Project Status
 
 | Area | Status |
 |:--|:--|
-| Linux-based x86_64 architecture | Planned and documented |
-| GRUB BIOS + UEFI boot | Configuration started; not boot-tested |
-| Kernel and initramfs payload | Not included |
-| Complete live root filesystem | Not implemented |
-| THREAD desktop and working apps | Planned; not implemented as a complete desktop |
-| Graphical installer and disk installation | Not implemented |
-| Reproducible, validated `THREAD.iso` | Not available yet |
-| QEMU / physical hardware verification | Not performed |
+| MBR stage-1 bootloader + 32-bit protected-mode entry | **Implemented and boot-tested** |
+| IDT (256 gates), PIC remapping, CPU exception handlers | **Implemented and tested** |
+| PIT 8254 timer @ 100 Hz with preemptive scheduling | **Implemented and tested** |
+| Low-overhead assembly context switcher (`switch_to`) | **Implemented and tested** |
+| Priority round-robin scheduler + time slices | **Implemented and tested** |
+| PS/2 keyboard + COM1 serial mirroring + VGA text console | **Implemented and tested** |
+| Dynamic 14 MB kernel heap allocator | **Implemented and tested** |
+| Spinlocks, mutexes, atomic counters | **Implemented and tested** |
+| Interactive shell with thread management | **Implemented and tested** |
+| Automated QEMU test suite (15/15 PASS) | **Verified** |
+| Bootable floppy/USB image + El Torito ISO | **Generated by `make`** |
+| THREAD desktop environment | Planned on the [roadmap](ROADMAP.md) |
+| Graphical installer | Planned on the [roadmap](ROADMAP.md) |
+| Linux-based desktop distribution release | Planned on the [roadmap](ROADMAP.md) |
 
-Features in the roadmap are goals, not promises that they already work. We will update this table when implementation and testing provide evidence.
+## ⌘ Technical Direction
 
-## ⌘ Technical direction
+THREAD OS follows a two-tier strategy:
 
-The initial target is **x86_64** with a Linux kernel foundation and GRUB for Legacy BIOS and UEFI. The THREAD identity is intended to come from its own desktop experience, applications, settings, workspace features, visual design, and installation tooling—not from falsely claiming an independently developed kernel.
+1. **Native bare-metal tier (implemented, v1.0):** a 32-bit x86 protected-mode kernel with real multitasking, interrupt-driven preemption, context switching in assembly, and a console shell. This gives the project a genuine, verified bootable foundation and proves the scheduler/concurrency design on real hardware semantics.
+2. **Linux-based desktop tier (planned):** an x86_64 desktop edition with GRUB (BIOS + UEFI), the THREAD desktop experience (launcher, panel, settings, workspace restore), a custom installer, and the THREAD application suite.
 
-Planned platform areas include:
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the native kernel internals and [ARCHITECTURE.md](ARCHITECTURE.md) for the long-term system vision.
 
-- **Boot:** GRUB, BIOS/UEFI paths, recovery and safe-graphics options.
-- **System:** Linux drivers, device discovery, storage, networking, accounts, and logs.
-- **Desktop:** a dark-first THREAD interface with launcher, panel, settings, notifications, and workspace restore.
-- **Applications:** Files, Settings, Terminal, Browser, Store, Notes, Monitor, Network, Security, Update Center, Recovery, and Workspace.
-- **Installer:** explicit disk selection, manual/guided partitioning, and confirmation before destructive changes.
-
-See [ARCHITECTURE.md](ARCHITECTURE.md) for the design and [ROADMAP.md](ROADMAP.md) for the staged plan.
-
-## 🛠 Build status and developer setup
-
-The current scripts are **starter tooling**, not a working ISO pipeline. Do not use the generated image (if one is produced) to install a computer or overwrite a USB drive. Required kernel/root-filesystem integration, live boot, installer implementation, and boot tests remain outstanding.
-
-Review [BUILD.md](BUILD.md) for current requirements and limitations. The repository's current script entry points are:
-
-```bash
-./scripts/build_iso.sh
-./scripts/validate_iso.sh
-./scripts/qemu_test.sh
-```
-
-Running these does **not** establish that the OS boots. A release must only be called bootable after producing the full image and validating BIOS and UEFI boot in a test environment.
-
-## 🗂 Repository map
+## 🗂 Repository Map
 
 ```text
-bootloader/   GRUB configuration and boot notes
-kernel/       Linux kernel strategy and configuration notes
-desktop/      THREAD desktop design
-applications/ application concepts and implementation notes
-system/       service and workspace design
-drivers/      hardware support strategy
-installer/    installer planning
-filesystem/   filesystem and disk layout design
-networking/   networking design
-security/     security model
-themes/       visual theme configuration
-assets/       brand assets
-scripts/      build and test scripts
-tests/        validation notes
-documentation/technical documentation
-iso/          ISO staging notes
+boot/           Stage-1 MBR bootloader
+bootloader/     GRUB configuration and boot notes (Linux tier)
+kernel/         Native kernel source (C + ASM) and Linux kernel notes
+drivers/        Hardware support strategy
+desktop/        THREAD desktop design
+applications/   Application concepts and implementation notes
+system/         Service and workspace design
+filesystem/     Filesystem and disk layout design
+networking/     Networking design
+security/       Security model
+themes/         Visual theme configuration
+assets/         Brand assets
+scripts/        run.sh, test.sh, and ISO build tooling
+tests/          Validation notes
+docs/           Architecture guide, user guide, screenshots
+documentation/  Technical documentation
+iso/            ISO staging notes
 ```
 
-## 🧵 Project principles
+## 🧵 Project Principles
 
-1. **Real over theatrical:** no mock interface presented as system functionality.
+1. **Real over theatrical:** every claim must be backed by code and tests.
 2. **Honest claims:** document what is implemented and what has actually been tested.
 3. **User control:** make risky disk and bootloader operations explicit and consent-based.
-4. **Maintainable foundations:** build on established Linux components before attempting kernel independence.
+4. **Maintainable foundations:** keep the codebase small, readable, and well tested.
 5. **Accessible customization:** make the system's appearance and behavior adaptable.
 
 ## 🤝 Contribute
 
-Contributions and constructive feedback are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md), then browse [open issues](https://github.com/jamilislamov642-cell/thread-os/issues) or [create an issue](https://github.com/jamilislamov642-cell/thread-os/issues/new/choose). Please report test environment and exact results; do not describe an untested feature as working.
+Contributions and constructive feedback are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md), then browse [open issues](https://github.com/jamilislamov642-cell/thread-os/issues) or [create an issue](https://github.com/jamilislamov642-cell/thread-os/issues/new/choose).
 
 ## About
 

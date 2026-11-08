@@ -2,6 +2,9 @@
 
 ## THREAD OS architecture
 
+> This document describes the **system-level vision** (the planned Linux-based desktop tier).
+> For the **implemented native bare-metal kernel internals** (bootloader, GDT/IDT, scheduler, context switch, heap, shell), see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
 ## Goals
 
 The first release prioritizes:

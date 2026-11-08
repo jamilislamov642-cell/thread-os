@@ -10,3 +10,7 @@ workspace/
 *.vmdk
 *.log
 *.tmp
+*.ppm
+dist/
+*.bin
+*.elf
