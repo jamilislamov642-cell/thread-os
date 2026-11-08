@@ -7,6 +7,8 @@
 #include "mem.h"
 #include "sync.h"
 #include "io.h"
+#include "desktop.h"
+#include "serial.h"
 
 #define MAX_LINE 128
 #define MAX_ARGS 8
@@ -22,6 +24,10 @@ static const struct { uint8_t fg; uint8_t bg; const char *name; } themes[] = {
     { VGA_COLOR_LIGHT_CYAN,   VGA_COLOR_BLUE,       "Solar Cyan"    },
     { VGA_COLOR_LIGHT_BROWN,  VGA_COLOR_BLACK,      "Amber Terminal"}
 };
+
+uint8_t shell_theme_fg(void) { return themes[theme_index].fg; }
+uint8_t shell_theme_bg(void) { return themes[theme_index].bg; }
+const char *shell_theme_name(void) { return themes[theme_index].name; }
 
 // Power management
 static void os_shutdown(void) {
@@ -225,6 +231,12 @@ static void cmd_help(void) {
     vga_set_color(VGA_COLOR_WHITE, themes[theme_index].bg);
     vga_printf("Available ThreadOS commands:\n");
     vga_set_color(themes[theme_index].fg, themes[theme_index].bg);
+    vga_printf("  desktop / workspace - return to the THREAD Desktop dashboard\n");
+    vga_printf("  apps / launcher     - open the real text-mode app launcher\n");
+    vga_printf("  files               - open the THREAD Files view\n");
+    vga_printf("  monitor             - open live scheduler/memory monitor\n");
+    vga_printf("  status              - show subsystem health status\n");
+    vga_printf("  open <app>          - open desktop, files, monitor, or apps\n");
     vga_printf("  help                - show this command list\n");
     vga_printf("  threads / ps        - list all threads and their live states\n");
     vga_printf("  spawn <name> [prio] - launch a background worker thread (prio 0-3)\n");
@@ -298,6 +310,33 @@ static void dispatch(int argc, char *argv[]) {
     else if (strcmp(cmd, "bench") == 0 || strcmp(cmd, "stress") == 0) cmd_bench();
     else if (strcmp(cmd, "mem") == 0)         cmd_mem();
     else if (strcmp(cmd, "about") == 0)       cmd_about();
+    else if (strcmp(cmd, "desktop") == 0 || strcmp(cmd, "workspace") == 0) {
+        desktop_draw();
+        serial_puts("[desktop] workspace dashboard ready\n");
+    }
+    else if (strcmp(cmd, "apps") == 0 || strcmp(cmd, "launcher") == 0) {
+        desktop_show_apps();
+        serial_puts("[desktop] app launcher ready\n");
+    }
+    else if (strcmp(cmd, "files") == 0) {
+        desktop_show_files();
+        serial_puts("[desktop] files view ready\n");
+    }
+    else if (strcmp(cmd, "monitor") == 0) {
+        desktop_show_monitor();
+        serial_puts("[desktop] live monitor ready\n");
+    }
+    else if (strcmp(cmd, "status") == 0) {
+        desktop_show_status();
+        serial_puts("[desktop] status center ready\n");
+    }
+    else if (strcmp(cmd, "open") == 0 && argc > 1) {
+        if (strcmp(argv[1], "files") == 0) desktop_show_files();
+        else if (strcmp(argv[1], "monitor") == 0) desktop_show_monitor();
+        else if (strcmp(argv[1], "apps") == 0) desktop_show_apps();
+        else if (strcmp(argv[1], "desktop") == 0) desktop_draw();
+        else vga_printf("Unknown app '%s'. Try: files, monitor, apps, desktop\n", argv[1]);
+    }
     else if (strcmp(cmd, "clear") == 0) {
         vga_clear();
     }
@@ -371,16 +410,8 @@ static void dispatch(int argc, char *argv[]) {
 
 void shell_init(void) {
     vga_set_color(themes[theme_index].fg, themes[theme_index].bg);
-    vga_clear();
-
-    vga_set_color(VGA_COLOR_LIGHT_CYAN, themes[theme_index].bg);
-    vga_printf("=================================================================\n");
-    vga_printf("                    ThreadOS  v1.0  (x86 32-bit)                \n");
-    vga_printf("            Preemptive Multitasking Operating System             \n");
-    vga_printf("=================================================================\n");
-    vga_set_color(themes[theme_index].fg, themes[theme_index].bg);
-    vga_printf("Booted in protected mode. PIT timer @ 100 Hz. PS/2 keyboard ready.\n");
-    vga_printf("Serial console mirrored on COM1. Type 'help' for commands.\n\n");
+    serial_puts("[ThreadOS] THREAD Desktop ready | protected mode | PIT 100 Hz\n");
+    desktop_draw();
 }
 
 void shell_run(void) {

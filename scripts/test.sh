@@ -31,6 +31,11 @@ def send(cmd, wait=1.2):
 
 time.sleep(3)
 send('help', 1.0)
+send('apps', 0.5)
+send('files', 0.5)
+send('monitor', 0.5)
+send('status', 0.5)
+send('desktop', 0.5)
 send('threads', 1.0)
 send('spawn alpha', 0.5)
 send('spawn beta 2', 0.5)
@@ -54,8 +59,13 @@ with open('/tmp/threados_test.log', 'w') as f:
 checks = [
     ('SeaBIOS', 'BIOS handoff'),
     ('Loading ThreadOS kernel', 'MBR bootloader'),
-    ('ThreadOS  v1.0', 'Kernel startup banner'),
-    ('Preemptive Multitasking Operating System', 'Protected-mode shell'),
+    ('[ThreadOS] THREAD Desktop ready', 'THREAD Desktop startup'),
+    ('[desktop] app launcher ready', 'App launcher view'),
+    ('[desktop] files view ready', 'Files view'),
+    ('[desktop] live monitor ready', 'Monitor view'),
+    ('[desktop] status center ready', 'Status center'),
+    ('[desktop] workspace dashboard ready', 'Dashboard view'),
+    ('ThreadOS>', 'Protected-mode shell prompt'),
     ('Available ThreadOS commands', 'Help command'),
     ('kernel_main', 'Thread table listing'),
     ('Spawned thread \'alpha\'', 'Thread spawn'),

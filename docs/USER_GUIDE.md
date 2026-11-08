@@ -295,3 +295,25 @@ gdb dist/kernel.elf
 | Nothing prints in terminal | Run `make run` for GUI mode, or add `-serial mon:stdio` for serial |
 | Keystrokes echoed twice in serial mode | Normal: input is printed both by the shell echo and by serial loopback in some terminal emulators |
 | Build error `i686-linux-gnu-gcc: command not found` | Install the cross-compiler: `sudo apt-get install gcc-i686-linux-gnu` |
+
+---
+
+## 12. THREAD Desktop v1.1
+
+The kernel now boots directly into a VGA dashboard inspired by the supplied `thread-desktop-v2.html` interface. Because the native OS does not contain a browser or JavaScript runtime, the desktop is implemented as a real kernel-rendered text UI backed by VGA memory and live kernel telemetry.
+
+The dashboard contains a dock, workspace overview, system status, notes panel, activity metrics, taskbar, and shell prompt. The following commands open working views:
+
+```text
+ThreadOS> desktop     # workspace dashboard
+ThreadOS> apps        # app launcher
+ThreadOS> files       # Files view
+ThreadOS> monitor     # live scheduler + memory telemetry
+ThreadOS> status      # subsystem health center
+ThreadOS> open files  # app-style launcher alias
+ThreadOS> color       # switch the active desktop theme
+```
+
+`monitor` reports the real PIT tick count, uptime, heap size/free memory, active threads, per-thread runtime, and context-switch totals. `files` is currently a kernel-provided workspace view; the filesystem driver and persistent disk-backed user files remain part of the next roadmap tier. `apps` exposes the real terminal, Files, Monitor, benchmark, Settings, and About surfaces available in this native build.
+
+The view tests are included in `scripts/test.sh`; all 21 boot, desktop, scheduler, concurrency, memory, and shutdown checks pass in QEMU.
