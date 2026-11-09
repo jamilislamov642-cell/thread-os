@@ -10,6 +10,12 @@
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-F5B75B?style=for-the-badge" alt="MIT license"></a>
   </p>
   <p>
+    <a href="https://github.com/jamilislamov642-cell/thread-os/releases/tag/v1.2.1"><img src="https://img.shields.io/badge/DOWNLOAD-FIRST-PACKAGE-4457FF?style=for-the-badge&logo=archive&logoColor=white" alt="Download first package"></a>
+    <a href="https://github.com/jamilislamov642-cell/thread-os/releases/download/v1.2.1/threados.iso"><img src="https://img.shields.io/badge/BOOT-ISO-26C6DA?style=for-the-badge&logo=linux&logoColor=071018" alt="Download bootable ISO"></a>
+    <a href="https://github.com/jamilislamov642-cell/thread-os/releases/download/v1.2.1/threados.img"><img src="https://img.shields.io/badge/BOOT-USB%20IMAGE-3DDC97?style=for-the-badge&logo=usb&logoColor=071018" alt="Download bootable USB image"></a>
+    <a href="https://github.com/jamilislamov642-cell/thread-os/releases"><img src="https://img.shields.io/badge/VIEW-ALL%20RELEASES-FF4D5E?style=for-the-badge&logo=github&logoColor=white" alt="View all releases"></a>
+  </p>
+  <p>
     <a href="README.md">English</a> ·
     <a href="README.ru.md">Русский</a> ·
     <a href="README.de.md">Deutsch</a> ·
@@ -19,13 +25,32 @@
 
 ---
 
+<div align="center">
+  <h2>THREAD OS v1.2.1</h2>
+  <p><strong>The first official downloadable package</strong></p>
+  <p>One package with the source code docs screenshots bootloader kernel ISO and USB image.</p>
+  <p>
+    <a href="https://github.com/jamilislamov642-cell/thread-os/releases/download/v1.2.1/threados-v1.2.1-complete.zip"><img src="https://img.shields.io/badge/DOWNLOAD-COMPLETE%20PACKAGE-8AE3C5?style=for-the-badge&logo=github&logoColor=071018" alt="Download complete package"></a>
+    <a href="https://github.com/jamilislamov642-cell/thread-os/releases/tag/v1.2.1"><img src="https://img.shields.io/badge/READ-RELEASE%20NOTES-F5B75B?style=for-the-badge&logo=readme&logoColor=071018" alt="Read release notes"></a>
+  </p>
+</div>
+
 ## The short version
 
 THREAD OS started as a vision for a personal operating system. It is now a **real 32-bit x86 system** that boots from an MBR image or ISO, enters protected mode, configures interrupts, starts a preemptive scheduler, manages memory, accepts keyboard input, and launches a kernel-rendered THREAD Desktop.
 
 It is small, direct, inspectable, and honest about what is implemented.
 
-> **Current release:** `v1.2.0` — Personal Desktop
+### Download the package
+
+| Download | Includes | Best for |
+|:--|:--|:--|
+| [**Complete package**](https://github.com/jamilislamov642-cell/thread-os/releases/download/v1.2.1/threados-v1.2.1-complete.zip) | Source docs screenshots ISO USB image kernel and bootloader | Starting the project |
+| [**Bootable ISO**](https://github.com/jamilislamov642-cell/thread-os/releases/download/v1.2.1/threados.iso) | El Torito boot image | QEMU VirtualBox and VMware |
+| [**USB image**](https://github.com/jamilislamov642-cell/thread-os/releases/download/v1.2.1/threados.img) | Raw 1.44 MB boot image | QEMU floppy or legacy USB |
+| [**Release notes**](https://github.com/jamilislamov642-cell/thread-os/releases/tag/v1.2.1) | Checksums and full changelog | Verifying the build |
+
+> **Current release:** `v1.2.1` — First Official Package
 >
 > **Verification:** `23/23` automated QEMU checks pass
 >
