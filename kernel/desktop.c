@@ -216,3 +216,30 @@ void desktop_show_status(void) {
     text_at(2, 23, "status: all core subsystems operational", VGA_COLOR_LIGHT_GREEN);
     vga_set_cursor(0, 24);
 }
+
+
+void desktop_show_settings(void) {
+    uint8_t f = shell_theme_fg(), a = VGA_COLOR_LIGHT_CYAN, d = VGA_COLOR_LIGHT_GREY;
+    vga_clear();
+    text_at(2, 1, "THREAD SETTINGS", a);
+    text_at(2, 2, "personalize the system without leaving the kernel", d);
+    panel(2, 4, 36, 13, "APPEARANCE", a, shell_theme_bg());
+    text_at(4, 6, "ACTIVE THEME", d);
+    text_at(21, 6, shell_theme_name(), f);
+    text_at(4, 8, "[1] Classic White", f);
+    text_at(4, 10, "[2] Matrix Green", VGA_COLOR_LIGHT_GREEN);
+    text_at(4, 12, "[3] Solar Cyan", VGA_COLOR_LIGHT_CYAN);
+    text_at(4, 14, "[4] Amber Terminal", VGA_COLOR_LIGHT_BROWN);
+    text_at(4, 16, "theme next  cycles themes", d);
+    panel(41, 4, 37, 13, "SYSTEM CONTROLS", VGA_COLOR_LIGHT_GREEN, shell_theme_bg());
+    text_at(43, 6, "[D] desktop dashboard", f);
+    text_at(43, 8, "[M] live monitor", f);
+    text_at(43, 10, "[R] reboot", VGA_COLOR_LIGHT_RED);
+    text_at(43, 12, "[S] shutdown", VGA_COLOR_LIGHT_RED);
+    text_at(43, 14, "preference storage: kernel", d);
+    text_at(43, 16, "safe mode: enabled", VGA_COLOR_LIGHT_GREEN);
+    fill_row(21, '=', a);
+    text_at(2, 22, "THREAD // SETTINGS", a);
+    text_at(2, 23, "theme next  desktop  monitor  reboot  shutdown", f);
+    vga_set_cursor(0, 24);
+}

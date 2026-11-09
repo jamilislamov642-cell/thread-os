@@ -35,6 +35,8 @@ send('apps', 0.5)
 send('files', 0.5)
 send('monitor', 0.5)
 send('status', 0.5)
+send('settings', 0.5)
+send('theme next', 0.5)
 send('desktop', 0.5)
 send('threads', 1.0)
 send('spawn alpha', 0.5)
@@ -64,6 +66,8 @@ checks = [
     ('[desktop] files view ready', 'Files view'),
     ('[desktop] live monitor ready', 'Monitor view'),
     ('[desktop] status center ready', 'Status center'),
+    ('[desktop] settings ready', 'Settings view'),
+    ('[desktop] theme changed', 'Theme cycling'),
     ('[desktop] workspace dashboard ready', 'Dashboard view'),
     ('ThreadOS>', 'Protected-mode shell prompt'),
     ('Available ThreadOS commands', 'Help command'),

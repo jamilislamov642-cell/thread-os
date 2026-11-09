@@ -312,8 +312,10 @@ ThreadOS> monitor     # live scheduler + memory telemetry
 ThreadOS> status      # subsystem health center
 ThreadOS> open files  # app-style launcher alias
 ThreadOS> color       # switch the active desktop theme
+ThreadOS> settings    # open system controls and theme selector
+ThreadOS> theme next  # cycle theme and redraw the dashboard
 ```
 
 `monitor` reports the real PIT tick count, uptime, heap size/free memory, active threads, per-thread runtime, and context-switch totals. `files` is currently a kernel-provided workspace view; the filesystem driver and persistent disk-backed user files remain part of the next roadmap tier. `apps` exposes the real terminal, Files, Monitor, benchmark, Settings, and About surfaces available in this native build.
 
-The view tests are included in `scripts/test.sh`; all 21 boot, desktop, scheduler, concurrency, memory, and shutdown checks pass in QEMU.
+The view tests are included in `scripts/test.sh`; all 23 boot, desktop, settings, theme, scheduler, concurrency, memory, and shutdown checks pass in QEMU.

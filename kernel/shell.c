@@ -28,6 +28,10 @@ static const struct { uint8_t fg; uint8_t bg; const char *name; } themes[] = {
 uint8_t shell_theme_fg(void) { return themes[theme_index].fg; }
 uint8_t shell_theme_bg(void) { return themes[theme_index].bg; }
 const char *shell_theme_name(void) { return themes[theme_index].name; }
+void shell_cycle_theme(void) {
+    theme_index = (theme_index + 1) % (sizeof(themes) / sizeof(themes[0]));
+    vga_set_color(themes[theme_index].fg, themes[theme_index].bg);
+}
 
 // Power management
 static void os_shutdown(void) {
@@ -236,6 +240,8 @@ static void cmd_help(void) {
     vga_printf("  files               - open the THREAD Files view\n");
     vga_printf("  monitor             - open live scheduler/memory monitor\n");
     vga_printf("  status              - show subsystem health status\n");
+    vga_printf("  settings / theme    - open settings and personalization\n");
+    vga_printf("  theme next          - cycle theme and return to desktop\n");
     vga_printf("  open <app>          - open desktop, files, monitor, or apps\n");
     vga_printf("  help                - show this command list\n");
     vga_printf("  threads / ps        - list all threads and their live states\n");
@@ -330,6 +336,16 @@ static void dispatch(int argc, char *argv[]) {
         desktop_show_status();
         serial_puts("[desktop] status center ready\n");
     }
+    else if (strcmp(cmd, "settings") == 0 || strcmp(cmd, "theme") == 0) {
+        if (argc > 1 && strcmp(argv[1], "next") == 0) {
+            shell_cycle_theme();
+            serial_puts("[desktop] theme changed\n");
+            desktop_draw();
+        } else {
+            desktop_show_settings();
+            serial_puts("[desktop] settings ready\n");
+        }
+    }
     else if (strcmp(cmd, "open") == 0 && argc > 1) {
         if (strcmp(argv[1], "files") == 0) desktop_show_files();
         else if (strcmp(argv[1], "monitor") == 0) desktop_show_monitor();
@@ -347,9 +363,9 @@ static void dispatch(int argc, char *argv[]) {
     }
     else if (strcmp(cmd, "color") == 0) {
         theme_index = (theme_index + 1) % 4;
-        vga_set_color(themes[theme_index].fg, themes[theme_index].bg);
-        vga_clear();
-        vga_printf("Theme: %s\n", themes[theme_index].name);
+        shell_cycle_theme();
+        desktop_draw();
+        serial_puts("[desktop] theme changed\n");
     }
     else if (strcmp(cmd, "spawn") == 0) {
         const char *name = (argc > 1) ? argv[1] : "worker";
