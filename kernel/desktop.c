@@ -80,6 +80,7 @@ void desktop_draw(void) {
     text_at(11, 12, "SYSTEM", silver);
     text_at(11, 13, "[M] Monitor", blue);
     text_at(11, 14, "[S] Settings", green);
+    text_at(11, 15, "[P] Dashboard", VGA_COLOR_LIGHT_CYAN);
     text_at(11, 16, "THREAD OS", blue);
     text_at(11, 17, "i686 native", silver);
 
@@ -101,7 +102,7 @@ void desktop_draw(void) {
     /* Dock: compact, centered, and keyboard-first until a mouse driver arrives. */
     fill_row(21, ' ', bg);
     text_at(19, 21, ".------------------- DOCK -------------------.", blue);
-    text_at(20, 22, "[@] Finder   [>] Terminal   [#] Monitor", white);
+    text_at(20, 22, "[@] Finder [>] Terminal [#] Monitor [~] Dashboard", white);
     text_at(23, 23, "[$] Apps   [*] Settings   [!] Power", silver);
     vga_set_cursor(0, 24);
 }
@@ -191,6 +192,114 @@ void desktop_show_monitor(void) {
     vga_set_cursor(0, 24);
 }
 
+static uint32_t dashboard_runtime(thread_t *threads, int count) {
+    uint32_t total = 0;
+    for (int i = 0; i < count; i++) {
+        if (threads[i].state == THREAD_FREE || threads[i].state == THREAD_DEAD) continue;
+        if (strcmp(threads[i].name, "idle") == 0) continue;
+        total += threads[i].runtime_ticks;
+    }
+    return total;
+}
+
+static void dashboard_graph(const uint8_t *history, int samples, uint8_t color) {
+    for (int x = 0; x < 64; x++) {
+        int i = samples - 64 + x;
+        uint8_t value = (i >= 0) ? history[i] : 0;
+        int y = 12 - (value * 5 / 100);
+        if (y < 7) y = 7;
+        if (y > 12) y = 12;
+        vga_putc_at(9 + x, y, '*', color);
+        if (x > 0) {
+            int prev_i = i - 1;
+            uint8_t prev = (prev_i >= 0) ? history[prev_i] : 0;
+            int py = 12 - (prev * 5 / 100);
+            if (py < 7) py = 7;
+            if (py > 12) py = 12;
+            if (py != y) vga_putc_at(9 + x, (py + y) / 2, '.', color);
+        }
+    }
+}
+
+static void dashboard_draw(const uint8_t *history, int samples, uint32_t busy, uint32_t ram, uint32_t seconds) {
+    uint8_t fg = shell_theme_fg(), bg = shell_theme_bg();
+    vga_clear();
+    fill_row(0, ' ', VGA_COLOR_DARK_GREY);
+    text_at(2, 0, "@ THREAD", VGA_COLOR_WHITE);
+    text_at(18, 0, "PERFORMANCE", VGA_COLOR_LIGHT_CYAN);
+    text_at(59, 0, "LIVE / 100Hz", VGA_COLOR_LIGHT_GREEN);
+    text_at(2, 2, "SYSTEM DASHBOARD", VGA_COLOR_LIGHT_CYAN);
+    text_at(22, 2, "real kernel samples only", VGA_COLOR_LIGHT_GREY);
+    text_at(58, 2, "uptime", VGA_COLOR_LIGHT_GREY);
+    num_at(66, 2, seconds, fg);
+    text_at(72, 2, "sec", VGA_COLOR_LIGHT_GREY);
+
+    panel(2, 4, 76, 11, "SCHEDULER LOAD WAVE  /  non-idle runtime", VGA_COLOR_LIGHT_CYAN, bg);
+    text_at(4, 6, "100%", VGA_COLOR_DARK_GREY);
+    text_at(4, 12, "0%", VGA_COLOR_DARK_GREY);
+    for (int x = 9; x < 73; x++) vga_putc_at(x, 12, '-', VGA_COLOR_DARK_GREY);
+    dashboard_graph(history, samples, VGA_COLOR_LIGHT_CYAN);
+    text_at(4, 14, "scheduler utilization", VGA_COLOR_LIGHT_GREY);
+    num_at(27, 14, busy, VGA_COLOR_LIGHT_GREEN);
+    text_at(31, 14, "%", VGA_COLOR_LIGHT_GREEN);
+    text_at(40, 14, "active threads", VGA_COLOR_LIGHT_GREY);
+    num_at(56, 14, thread_count_active(), fg);
+
+    panel(2, 16, 24, 5, "MEMORY", VGA_COLOR_LIGHT_GREEN, bg);
+    text_at(4, 18, "heap used", VGA_COLOR_LIGHT_GREY);
+    num_at(15, 18, ram, VGA_COLOR_LIGHT_GREEN);
+    text_at(20, 18, "%", VGA_COLOR_LIGHT_GREEN);
+    text_at(4, 19, "free", VGA_COLOR_LIGHT_GREY);
+    num_at(10, 19, kmem_available() / 1024, fg);
+    text_at(16, 19, "K", VGA_COLOR_LIGHT_GREY);
+
+    panel(28, 16, 24, 5, "HARDWARE", VGA_COLOR_LIGHT_BROWN, bg);
+    text_at(30, 18, "CPU", VGA_COLOR_LIGHT_GREY);
+    text_at(35, 18, "i686 / real", VGA_COLOR_LIGHT_GREEN);
+    text_at(30, 19, "GPU / temp", VGA_COLOR_LIGHT_GREY);
+    text_at(41, 19, "unavailable", VGA_COLOR_LIGHT_BROWN);
+
+    panel(54, 16, 24, 5, "IO STATUS", VGA_COLOR_LIGHT_MAGENTA, bg);
+    text_at(56, 18, "disk", VGA_COLOR_LIGHT_GREY);
+    text_at(62, 18, "not exposed", VGA_COLOR_LIGHT_BROWN);
+    text_at(56, 19, "network", VGA_COLOR_LIGHT_GREY);
+    text_at(65, 19, "not exposed", VGA_COLOR_LIGHT_BROWN);
+    fill_row(22, '=', VGA_COLOR_LIGHT_CYAN);
+    text_at(2, 23, "live dashboard  |  press any key to return  |  no simulated hardware data", fg);
+    vga_set_cursor(0, 24);
+}
+
+void desktop_show_dashboard(void) {
+    uint8_t history[64];
+    for (int i = 0; i < 64; i++) history[i] = 0;
+    thread_t *threads = (thread_t *)0;
+    int count = thread_get_all(&threads);
+    uint32_t previous_ticks = timer_ticks();
+    uint32_t previous_runtime = dashboard_runtime(threads, count);
+    int samples = 0;
+    for (;;) {
+        uint32_t now_ticks = timer_ticks();
+        uint32_t now_runtime = dashboard_runtime(threads, count);
+        uint32_t dt = now_ticks - previous_ticks;
+        uint32_t dr = now_runtime - previous_runtime;
+        uint32_t busy = dt ? (dr * 100u) / dt : 0;
+        if (busy > 100) busy = 100;
+        uint32_t used = kmem_total() ? (kmem_used() * 100u) / kmem_total() : 0;
+        if (used > 100) used = 100;
+        if (samples < 64) history[samples++] = (uint8_t)busy;
+        else {
+            for (int i = 1; i < 64; i++) history[i - 1] = history[i];
+            history[63] = (uint8_t)busy;
+        }
+        dashboard_draw(history, samples, busy, used, timer_seconds());
+        previous_ticks = now_ticks;
+        previous_runtime = now_runtime;
+        if (kbd_has_char()) { (void)kbd_getc(); break; }
+        thread_sleep(100);
+    }
+    desktop_draw();
+}
+
 void desktop_show_status(void) {
     uint8_t f = shell_theme_fg(), a = VGA_COLOR_LIGHT_CYAN;
     vga_clear();
@@ -231,6 +340,7 @@ void desktop_show_settings(void) {
     panel(41, 4, 37, 13, "SYSTEM CONTROLS", VGA_COLOR_LIGHT_GREEN, shell_theme_bg());
     text_at(43, 6, "[D] desktop dashboard", f);
     text_at(43, 8, "[M] live monitor", f);
+    text_at(43, 9, "[P] performance dashboard", f);
     text_at(43, 10, "[R] reboot", VGA_COLOR_LIGHT_RED);
     text_at(43, 12, "[S] shutdown", VGA_COLOR_LIGHT_RED);
     text_at(43, 14, "preference storage: kernel", d);

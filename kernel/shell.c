@@ -239,6 +239,7 @@ static void cmd_help(void) {
     vga_printf("  apps / launcher     - open the real text-mode app launcher\n");
     vga_printf("  files               - open the THREAD Files view\n");
     vga_printf("  monitor             - open live scheduler/memory monitor\n");
+    vga_printf("  dashboard           - live real-data performance dashboard (any key exits)\n");
     vga_printf("  status              - show subsystem health status\n");
     vga_printf("  settings / theme    - open settings and personalization\n");
     vga_printf("  theme next          - cycle theme and return to desktop\n");
@@ -328,6 +329,10 @@ static void dispatch(int argc, char *argv[]) {
         desktop_show_files();
         serial_puts("[desktop] files view ready\n");
     }
+    else if (strcmp(cmd, "dashboard") == 0 || strcmp(cmd, "performance") == 0) {
+        desktop_show_dashboard();
+        serial_puts("[desktop] live performance dashboard closed\n");
+    }
     else if (strcmp(cmd, "monitor") == 0) {
         desktop_show_monitor();
         serial_puts("[desktop] live monitor ready\n");
@@ -347,8 +352,9 @@ static void dispatch(int argc, char *argv[]) {
         }
     }
     else if (strcmp(cmd, "open") == 0 && argc > 1) {
-        if (strcmp(argv[1], "files") == 0) desktop_show_files();
+        if (strcmp(argv[1], "files") == 0 || strcmp(argv[1], "finder") == 0) desktop_show_files();
         else if (strcmp(argv[1], "monitor") == 0) desktop_show_monitor();
+        else if (strcmp(argv[1], "dashboard") == 0) desktop_show_dashboard();
         else if (strcmp(argv[1], "terminal") == 0) { vga_clear(); vga_set_cursor(0, 0); }
         else if (strcmp(argv[1], "apps") == 0) desktop_show_apps();
         else if (strcmp(argv[1], "settings") == 0) desktop_show_settings();

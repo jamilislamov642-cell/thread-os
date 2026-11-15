@@ -326,3 +326,10 @@ The view tests are included in `scripts/test.sh`; all 23 boot, desktop, settings
 ### v1.4 screenshot gallery
 
 The repository includes fresh QEMU VGA captures for the native workspace, Finder-style Files view, Launchpad-style Apps view, live Monitor, and Settings: `screenshot_workspace_macos.png`, `screenshot_finder_macos.png`, `screenshot_launchpad_macos.png`, `screenshot_monitor_macos.png`, and `screenshot_settings_macos.png`.
+
+
+## 13. Real-data performance dashboard
+
+Run `dashboard` or `performance` to open the live native dashboard. It samples the kernel’s PIT timer, thread runtime counters, active thread count, heap usage, and uptime. The scheduler graph is a continuously refreshed runtime waveform rather than an audio-style visualization. Press any key to return to the shell.
+
+The current kernel does not yet include PCI/GPU telemetry, ACPI thermal zones, a disk driver, a network stack, battery reporting, a compositor, a mouse driver, or a framebuffer. Those dashboard fields are explicitly labeled `unavailable` or `not exposed`; THREAD OS never invents hardware values.

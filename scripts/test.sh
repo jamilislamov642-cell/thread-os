@@ -41,6 +41,10 @@ send('home', 0.5)
 send('open finder', 0.5)
 send('open terminal', 0.5)
 send('desktop', 0.5)
+send('dashboard', 0.7)
+proc.stdin.write('q')
+proc.stdin.flush()
+time.sleep(0.7)
 send('threads', 1.0)
 send('spawn alpha', 0.5)
 send('spawn beta 2', 0.5)
@@ -72,6 +76,7 @@ checks = [
     ('[desktop] settings ready', 'Settings view'),
     ('[desktop] theme changed', 'Theme cycling'),
     ('[desktop] workspace dashboard ready', 'Dashboard view'),
+    ('[desktop] live performance dashboard closed', 'Live performance dashboard'),
     ('ThreadOS>', 'Protected-mode shell prompt'),
     ('Available ThreadOS commands', 'Help command'),
     ('kernel_main', 'Thread table listing'),
