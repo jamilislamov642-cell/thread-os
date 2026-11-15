@@ -48,64 +48,67 @@ void desktop_draw(void) {
     uint8_t green = VGA_COLOR_LIGHT_GREEN;
     uint8_t purple = VGA_COLOR_LIGHT_MAGENTA;
     uint8_t yellow = VGA_COLOR_LIGHT_BROWN;
+    uint8_t red = VGA_COLOR_LIGHT_RED;
 
     vga_clear();
-    fill_row(0, ' ', bg);
-    text_at(2, 0, "THREAD DESKTOP", accent);
-    text_at(61, 0, "v1.1  x86", dim);
-    text_at(2, 1, "Your computer. Your rules. Your system.", fg);
-    text_at(59, 1, "uptime ", dim);
-    num_at(66, 1, timer_seconds(), fg);
-    text_at(71, 1, "s", dim);
+    /* Desktop chrome: a compact Windows-like shell built directly in VGA memory. */
+    fill_row(0, ' ', VGA_COLOR_BLUE);
+    text_at(2, 0, "THREAD", VGA_COLOR_WHITE);
+    text_at(10, 0, "DESKTOP", accent);
+    text_at(62, 0, "protected mode", dim);
+    text_at(75, 0, "ON", green);
+    fill_row(1, '.', bg);
+    text_at(2, 2, "WORKSPACE", accent);
+    text_at(13, 2, "your computer / your rules / your system", dim);
+    text_at(67, 2, "uptime", dim);
+    num_at(74, 2, timer_seconds(), fg);
 
-    panel(0, 3, 17, 17, "DOCK", accent, bg);
-    text_at(2, 5, "[1] WORKSPACE", fg);
-    text_at(2, 7, "[2] TERMINAL", green);
-    text_at(2, 9, "[3] FILES", yellow);
-    text_at(2, 11, "[4] MONITOR", purple);
-    text_at(2, 13, "[5] APPS", accent);
-    text_at(2, 15, "[6] SETTINGS", dim);
-    text_at(2, 18, "desktop", accent);
+    /* Desktop icons. Keyboard shortcuts are the reliable input layer until mouse support lands. */
+    panel(2, 4, 17, 4, "TERMINAL", green, bg);
+    text_at(4, 6, "[1]  shell", fg);
+    panel(2, 9, 17, 4, "FILES", yellow, bg);
+    text_at(4, 11, "[2]  explorer", fg);
+    panel(2, 14, 17, 4, "MONITOR", purple, bg);
+    text_at(4, 16, "[3]  telemetry", fg);
 
-    panel(19, 3, 42, 9, "WORKSPACE  /  OVERVIEW", accent, bg);
-    text_at(21, 5, "Welcome back, operator.", fg);
-    text_at(21, 7, "[T] Terminal     [F] Files", green);
-    text_at(21, 8, "[M] Monitor      [A] App launcher", green);
-    text_at(21, 10, "Type a command below to control THREAD.", dim);
+    panel(21, 4, 37, 8, "THREAD HUB  /  desktop", accent, bg);
+    text_at(23, 6, "Welcome back, operator.", fg);
+    text_at(23, 8, "[A] app launcher   [S] settings", green);
+    text_at(23, 9, "[T] terminal      [F] files", green);
+    text_at(23, 10, "[M] monitor       [H] home", green);
 
-    panel(63, 3, 17, 9, "SYSTEM", purple, bg);
-    text_at(65, 5, "THREAD OS", fg);
-    text_at(65, 6, "protected mode", green);
-    text_at(65, 7, "PIT 100 Hz", green);
-    text_at(65, 8, "heap", dim);
-    num_at(71, 8, kmem_available() / 1024, fg);
-    text_at(76, 8, "K", dim);
-    text_at(65, 10, "online", green);
+    panel(60, 4, 18, 8, "SYSTEM", purple, bg);
+    text_at(62, 6, "THREAD OS", fg);
+    text_at(62, 7, "kernel online", green);
+    text_at(62, 8, "PIT 100 Hz", green);
+    text_at(62, 9, "threads", dim);
+    num_at(71, 9, thread_count_active(), fg);
+    text_at(62, 10, "heap", dim);
+    num_at(67, 10, kmem_available() / 1024, fg);
+    text_at(72, 10, "K free", dim);
 
-    panel(19, 13, 42, 7, "ACTIVITY", yellow, bg);
-    text_at(21, 15, "scheduler", dim);
-    text_at(33, 15, "RUNNING", green);
-    text_at(21, 16, "threads", dim);
-    num_at(33, 16, thread_count_active(), fg);
-    text_at(21, 17, "ticks", dim);
-    num_at(33, 17, timer_ticks(), fg);
-    text_at(21, 18, "ready for commands", accent);
+    panel(21, 14, 37, 5, "ACTIVITY CENTER", yellow, bg);
+    text_at(23, 16, "scheduler", dim);
+    text_at(34, 16, "RUNNING", green);
+    text_at(23, 17, "active threads", dim);
+    num_at(38, 17, thread_count_active(), fg);
+    text_at(23, 18, "ready for commands", accent);
 
-    panel(63, 13, 17, 7, "NOTES", green, bg);
-    text_at(65, 15, "Boot complete.", fg);
-    text_at(65, 16, "Try 'apps'", dim);
-    text_at(65, 17, "or 'help'.", dim);
-    text_at(65, 18, "safe to use", green);
+    panel(60, 14, 18, 5, "NOTIFICATIONS", red, bg);
+    text_at(62, 16, "Boot complete", fg);
+    text_at(62, 17, "No new alerts", dim);
+    text_at(62, 18, "safe to use", green);
 
+    /* Taskbar and start button. */
     fill_row(21, '=', accent);
-    text_at(2, 22, "[THREAD]", accent);
-    text_at(12, 22, "desktop", fg);
-    text_at(24, 22, "terminal", green);
+    text_at(2, 22, "[THREAD]", VGA_COLOR_WHITE);
+    text_at(13, 22, "desktop", fg);
+    text_at(25, 22, "terminal", green);
     text_at(37, 22, "files", yellow);
     text_at(47, 22, "monitor", purple);
     text_at(59, 22, "apps", accent);
-    text_at(70, 22, "online", green);
-    text_at(2, 23, "commands: desktop  apps  files  monitor  status  help", dim);
+    text_at(69, 22, "online", green);
+    text_at(2, 23, "start  desktop  apps  files  monitor  settings  help", dim);
     vga_set_cursor(0, 24);
 }
 

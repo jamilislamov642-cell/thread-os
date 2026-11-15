@@ -298,19 +298,21 @@ gdb dist/kernel.elf
 
 ---
 
-## 12. THREAD Desktop v1.1
+## 12. THREAD Desktop v1.3 — Windows-style workspace
 
 The kernel now boots directly into a VGA dashboard inspired by the supplied `thread-desktop-v2.html` interface. Because the native OS does not contain a browser or JavaScript runtime, the desktop is implemented as a real kernel-rendered text UI backed by VGA memory and live kernel telemetry.
 
-The dashboard contains a dock, workspace overview, system status, notes panel, activity metrics, taskbar, and shell prompt. The following commands open working views:
+The dashboard now boots into a compact Windows-inspired workspace with a blue title bar, desktop icons, window-like panels, a taskbar, notifications, activity cards, and a shell prompt. It is still implemented entirely by the kernel in VGA memory. The following commands open working views:
 
 ```text
-ThreadOS> desktop     # workspace dashboard
+ThreadOS> desktop     # Windows-style workspace dashboard
+ThreadOS> start       # same dashboard via Start-style alias
 ThreadOS> apps        # app launcher
 ThreadOS> files       # Files view
 ThreadOS> monitor     # live scheduler + memory telemetry
 ThreadOS> status      # subsystem health center
 ThreadOS> open files  # app-style launcher alias
+ThreadOS> open settings # system controls
 ThreadOS> color       # switch the active desktop theme
 ThreadOS> settings    # open system controls and theme selector
 ThreadOS> theme next  # cycle theme and redraw the dashboard
@@ -318,4 +320,4 @@ ThreadOS> theme next  # cycle theme and redraw the dashboard
 
 `monitor` reports the real PIT tick count, uptime, heap size/free memory, active threads, per-thread runtime, and context-switch totals. `files` is currently a kernel-provided workspace view; the filesystem driver and persistent disk-backed user files remain part of the next roadmap tier. `apps` exposes the real terminal, Files, Monitor, benchmark, Settings, and About surfaces available in this native build.
 
-The view tests are included in `scripts/test.sh`; all 23 boot, desktop, settings, theme, scheduler, concurrency, memory, and shutdown checks pass in QEMU.
+The view tests are included in `scripts/test.sh`; all 23 boot, desktop, settings, theme, scheduler, concurrency, memory, and shutdown checks pass in QEMU. The new dashboard is captured in `docs/screenshot_desktop_windows.png`.

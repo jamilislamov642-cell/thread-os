@@ -4,9 +4,9 @@
   <p><strong>your computer your rules your system</strong></p>
   <p>real bootable x86 os · preemptive kernel · kernel rendered desktop</p>
 
-  <a href="https://github.com/jamilislamov642-cell/thread-os/releases/download/v1.2.1/threados-v1.2.1-complete.zip"><img src="https://img.shields.io/badge/DOWNLOAD-PACKAGE-7C5CFF?style=for-the-badge&logo=archive&logoColor=white" alt="Download package"></a>
-  <a href="https://github.com/jamilislamov642-cell/thread-os/releases/download/v1.2.1/threados.iso"><img src="https://img.shields.io/badge/BOOT-ISO-00C2FF?style=for-the-badge&logo=linux&logoColor=071018" alt="Boot ISO"></a>
-  <a href="https://github.com/jamilislamov642-cell/thread-os/releases/download/v1.2.1/threados.img"><img src="https://img.shields.io/badge/BOOT-USB-00D68F?style=for-the-badge&logo=usb&logoColor=071018" alt="Boot USB image"></a>
+  <a href="https://github.com/jamilislamov642-cell/thread-os/releases/download/v1.3.0/threados-v1.3.0-complete.zip"><img src="https://img.shields.io/badge/DOWNLOAD-PACKAGE-7C5CFF?style=for-the-badge&logo=archive&logoColor=white" alt="Download package"></a>
+  <a href="https://github.com/jamilislamov642-cell/thread-os/releases/download/v1.3.0/threados.iso"><img src="https://img.shields.io/badge/BOOT-ISO-00C2FF?style=for-the-badge&logo=linux&logoColor=071018" alt="Boot ISO"></a>
+  <a href="https://github.com/jamilislamov642-cell/thread-os/releases/download/v1.3.0/threados.img"><img src="https://img.shields.io/badge/BOOT-USB-00D68F?style=for-the-badge&logo=usb&logoColor=071018" alt="Boot USB image"></a>
   <a href="https://github.com/jamilislamov642-cell/thread-os/releases"><img src="https://img.shields.io/badge/RELEASES-FF4D6D?style=for-the-badge&logo=github&logoColor=white" alt="Releases"></a>
 
   <br>
@@ -25,16 +25,16 @@ THREAD OS is a small real operating system that boots from BIOS and drops into i
 
 no browser mockup. no fake progress. just a bootloader a kernel a scheduler and a surprisingly colorful VGA screen.
 
-> **latest:** `v1.2.1` · **tests:** `23/23 pass` · **arch:** `i686`
+> **latest:** `v1.3.0` · **tests:** `23/23 pass` · **arch:** `i686`
 
 ## download the first package
 
 | file | what it is |
 |:--|:--|
-| [complete package](https://github.com/jamilislamov642-cell/thread-os/releases/download/v1.2.1/threados-v1.2.1-complete.zip) | source docs screenshots binaries and images |
-| [bootable ISO](https://github.com/jamilislamov642-cell/thread-os/releases/download/v1.2.1/threados.iso) | QEMU VirtualBox or VMware |
-| [USB image](https://github.com/jamilislamov642-cell/thread-os/releases/download/v1.2.1/threados.img) | raw floppy or legacy USB boot |
-| [release notes](https://github.com/jamilislamov642-cell/thread-os/releases/tag/v1.2.1) | checksums changelog and details |
+| [complete package](https://github.com/jamilislamov642-cell/thread-os/releases/download/v1.3.0/threados-v1.3.0-complete.zip) | source docs screenshots binaries and images |
+| [bootable ISO](https://github.com/jamilislamov642-cell/thread-os/releases/download/v1.3.0/threados.iso) | QEMU VirtualBox or VMware |
+| [USB image](https://github.com/jamilislamov642-cell/thread-os/releases/download/v1.3.0/threados.img) | raw floppy or legacy USB boot |
+| [release notes](https://github.com/jamilislamov642-cell/thread-os/releases/tag/v1.3.0) | checksums changelog and details |
 
 ## boot it
 
@@ -69,7 +69,7 @@ theme next    bench         about
 - VGA text output and PS2 keyboard
 - COM1 serial mirror
 - mutexes spinlocks and atomic counters
-- THREAD Desktop dashboard
+- THREAD Desktop dashboard with Windows-style taskbar and desktop icons
 - app launcher Files Monitor Status and Settings
 - four live color themes
 - QEMU test suite with 23 passing checks
@@ -78,7 +78,7 @@ theme next    bench         about
 
 <table>
   <tr>
-    <td><img src="docs/screenshot_desktop.png" alt="THREAD Desktop" /></td>
+    <td><img src="docs/screenshot_desktop_windows.png" alt="THREAD Desktop Windows-style workspace" /></td>
     <td><img src="docs/screenshot_monitor.png" alt="THREAD Monitor" /></td>
   </tr>
   <tr>
@@ -97,12 +97,14 @@ theme next    bench         about
 
 Everything above is rendered by the native kernel into VGA memory and uses live scheduler timer heap and thread data.
 
+The new workspace adds a compact Windows-inspired shell: a blue title bar, desktop icons, windowed panels, a taskbar, a Start-style command row, notifications, and live system cards. It is still pure kernel-rendered VGA text, so it boots and works without a browser or graphical runtime.
+
 ## commands worth trying
 
 | command | mood |
 |:--|:--|
-| `desktop` | go home |
-| `apps` | open the launcher |
+| `desktop` | open the Windows-style workspace |
+| `start` / `apps` | open the Start-style app launcher |
 | `files` | browse the native workspace view |
 | `monitor` | watch the kernel breathe |
 | `settings` | personalize the system |
@@ -130,7 +132,7 @@ The test suite boots the image in QEMU and checks boot handoff desktop startup a
 |:--|:--|
 | bootable native kernel | persistent filesystem |
 | preemptive multitasking | richer Files operations |
-| THREAD Desktop views | mouse and better input navigation |
+| Windows-style taskbar and desktop shell | mouse and better input navigation |
 | live themes and telemetry | framebuffer graphics |
 | ISO and USB releases | graphical installer |
 
