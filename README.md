@@ -25,7 +25,7 @@ THREAD OS is a small real operating system that boots from BIOS and drops into i
 
 no browser mockup. no fake progress. just a bootloader a kernel a scheduler and a surprisingly colorful VGA screen.
 
-> **latest:** `v1.5.0` · **tests:** `23/23 pass` · **arch:** `i686`
+> **latest:** `v1.5.0` · **tests:** `24/24 pass` · **arch:** `i686`
 
 ## download the first package
 
