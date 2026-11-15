@@ -321,3 +321,8 @@ ThreadOS> theme next  # cycle theme and redraw the dashboard
 `monitor` reports the real PIT tick count, uptime, heap size/free memory, active threads, per-thread runtime, and context-switch totals. `files` is currently a kernel-provided workspace view; the filesystem driver and persistent disk-backed user files remain part of the next roadmap tier. `apps` exposes the real terminal, Files, Monitor, benchmark, Settings, and About surfaces available in this native build.
 
 The view tests are included in `scripts/test.sh`; all 23 boot, desktop, settings, theme, scheduler, concurrency, memory, and shutdown checks pass in QEMU. The new dashboard is captured in `docs/screenshot_desktop_macos.png`.
+
+
+### v1.4 screenshot gallery
+
+The repository includes fresh QEMU VGA captures for the native workspace, Finder-style Files view, Launchpad-style Apps view, live Monitor, and Settings: `screenshot_workspace_macos.png`, `screenshot_finder_macos.png`, `screenshot_launchpad_macos.png`, `screenshot_monitor_macos.png`, and `screenshot_settings_macos.png`.

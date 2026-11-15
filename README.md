@@ -97,6 +97,31 @@ theme next    bench         about
 
 Everything above is rendered by the native kernel into VGA memory and uses live scheduler timer heap and thread data.
 
+### v1.4 native workspace captures
+
+These are real VGA framebuffer captures from QEMU running the v1.4.0 image.
+
+<table>
+  <tr>
+    <td><img src="docs/screenshot_workspace_macos.png" alt="THREAD native macOS-inspired workspace" /></td>
+    <td><img src="docs/screenshot_finder_macos.png" alt="THREAD Finder-style files view" /></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>workspace</strong></td>
+    <td align="center"><strong>finder</strong></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshot_launchpad_macos.png" alt="THREAD app launcher" /></td>
+    <td><img src="docs/screenshot_settings_macos.png" alt="THREAD settings view" /></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>launchpad</strong></td>
+    <td align="center"><strong>settings</strong></td>
+  </tr>
+</table>
+
+The monitor capture is available at [`docs/screenshot_monitor_macos.png`](docs/screenshot_monitor_macos.png).
+
 The new workspace adds a compact macOS-inspired shell: a top menu bar, Finder-like sidebar, native window controls, live system cards, and a centered dock. It is still pure kernel-rendered VGA text, so it boots and works without a browser or graphical runtime.
 
 ## commands worth trying
