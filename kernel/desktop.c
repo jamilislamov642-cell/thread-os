@@ -43,72 +43,66 @@ static void panel(int x, int y, int w, int h, const char *title, uint8_t border,
 void desktop_draw(void) {
     uint8_t fg = shell_theme_fg();
     uint8_t bg = shell_theme_bg();
-    uint8_t accent = VGA_COLOR_LIGHT_CYAN;
-    uint8_t dim = VGA_COLOR_LIGHT_GREY;
+    uint8_t white = VGA_COLOR_WHITE;
+    uint8_t silver = VGA_COLOR_LIGHT_GREY;
+    uint8_t blue = VGA_COLOR_LIGHT_CYAN;
     uint8_t green = VGA_COLOR_LIGHT_GREEN;
-    uint8_t purple = VGA_COLOR_LIGHT_MAGENTA;
-    uint8_t yellow = VGA_COLOR_LIGHT_BROWN;
+    uint8_t violet = VGA_COLOR_LIGHT_MAGENTA;
+    uint8_t amber = VGA_COLOR_LIGHT_BROWN;
     uint8_t red = VGA_COLOR_LIGHT_RED;
 
     vga_clear();
-    /* Desktop chrome: a compact Windows-like shell built directly in VGA memory. */
-    fill_row(0, ' ', VGA_COLOR_BLUE);
-    text_at(2, 0, "THREAD", VGA_COLOR_WHITE);
-    text_at(10, 0, "DESKTOP", accent);
-    text_at(62, 0, "protected mode", dim);
-    text_at(75, 0, "ON", green);
-    fill_row(1, '.', bg);
-    text_at(2, 2, "WORKSPACE", accent);
-    text_at(13, 2, "your computer / your rules / your system", dim);
-    text_at(67, 2, "uptime", dim);
-    num_at(74, 2, timer_seconds(), fg);
+    /* THREAD Workspace: a macOS-inspired shell rendered directly by the kernel. */
+    fill_row(0, ' ', VGA_COLOR_DARK_GREY);
+    text_at(2, 0, "@", white);
+    text_at(5, 0, "THREAD", white);
+    text_at(14, 0, "File", silver);
+    text_at(21, 0, "Edit", silver);
+    text_at(29, 0, "View", silver);
+    text_at(37, 0, "Window", silver);
+    text_at(47, 0, "Help", silver);
+    text_at(61, 0, "PIT 100Hz", green);
+    text_at(72, 0, "ON", green);
+    fill_row(1, ' ', bg);
+    text_at(3, 2, "THREAD / WORKSPACE", blue);
+    text_at(58, 2, "uptime", silver);
+    num_at(66, 2, timer_seconds(), fg);
+    text_at(72, 2, "sec", silver);
 
-    /* Desktop icons. Keyboard shortcuts are the reliable input layer until mouse support lands. */
-    panel(2, 4, 17, 4, "TERMINAL", green, bg);
-    text_at(4, 6, "[1]  shell", fg);
-    panel(2, 9, 17, 4, "FILES", yellow, bg);
-    text_at(4, 11, "[2]  explorer", fg);
-    panel(2, 14, 17, 4, "MONITOR", purple, bg);
-    text_at(4, 16, "[3]  telemetry", fg);
+    panel(8, 4, 64, 15, "THREAD Workspace", blue, bg);
+    /* Window controls and Finder-like sidebar. */
+    text_at(11, 5, "o o o", red);
+    text_at(18, 5, "native desktop", silver);
+    text_at(11, 7, "FAVORITES", silver);
+    text_at(11, 8, "[H] Home", white);
+    text_at(11, 9, "[F] Files", amber);
+    text_at(11, 10, "[A] Apps", violet);
+    text_at(11, 12, "SYSTEM", silver);
+    text_at(11, 13, "[M] Monitor", blue);
+    text_at(11, 14, "[S] Settings", green);
+    text_at(11, 16, "THREAD OS", blue);
+    text_at(11, 17, "i686 native", silver);
 
-    panel(21, 4, 37, 8, "THREAD HUB  /  desktop", accent, bg);
-    text_at(23, 6, "Welcome back, operator.", fg);
-    text_at(23, 8, "[A] app launcher   [S] settings", green);
-    text_at(23, 9, "[T] terminal      [F] files", green);
-    text_at(23, 10, "[M] monitor       [H] home", green);
+    text_at(28, 7, "Good morning, operator.", white);
+    text_at(28, 8, "This Mac is actually a kernel.", blue);
+    panel(28, 10, 19, 5, "THIS THREAD", violet, bg);
+    text_at(30, 12, "protected mode", green);
+    text_at(30, 13, "scheduler live", green);
+    text_at(30, 14, "threads", silver);
+    num_at(39, 14, thread_count_active(), fg);
+    panel(49, 10, 19, 5, "STORAGE", amber, bg);
+    text_at(51, 12, "kernel heap", silver);
+    num_at(51, 13, kmem_available() / 1024, fg);
+    text_at(58, 13, "K free", silver);
+    text_at(51, 14, "filesystem", green);
+    text_at(61, 14, "READY", green);
+    text_at(28, 17, "Press a shortcut or type a command to open a view.", silver);
 
-    panel(60, 4, 18, 8, "SYSTEM", purple, bg);
-    text_at(62, 6, "THREAD OS", fg);
-    text_at(62, 7, "kernel online", green);
-    text_at(62, 8, "PIT 100 Hz", green);
-    text_at(62, 9, "threads", dim);
-    num_at(71, 9, thread_count_active(), fg);
-    text_at(62, 10, "heap", dim);
-    num_at(67, 10, kmem_available() / 1024, fg);
-    text_at(72, 10, "K free", dim);
-
-    panel(21, 14, 37, 5, "ACTIVITY CENTER", yellow, bg);
-    text_at(23, 16, "scheduler", dim);
-    text_at(34, 16, "RUNNING", green);
-    text_at(23, 17, "active threads", dim);
-    num_at(38, 17, thread_count_active(), fg);
-    text_at(23, 18, "ready for commands", accent);
-
-    panel(60, 14, 18, 5, "NOTIFICATIONS", red, bg);
-    text_at(62, 16, "Boot complete", fg);
-    text_at(62, 17, "No new alerts", dim);
-    text_at(62, 18, "safe to use", green);
-
-    /* Taskbar and start button. */
-    fill_row(21, '=', accent);
-    text_at(2, 22, "[THREAD]", VGA_COLOR_WHITE);
-    text_at(13, 22, "desktop", fg);
-    text_at(25, 22, "terminal", green);
-    text_at(37, 22, "files", yellow);
-    text_at(47, 22, "monitor", purple);
-    text_at(59, 22, "apps", accent);
-    text_at(69, 22, "online", green);
-    text_at(2, 23, "start  desktop  apps  files  monitor  settings  help", dim);
+    /* Dock: compact, centered, and keyboard-first until a mouse driver arrives. */
+    fill_row(21, ' ', bg);
+    text_at(19, 21, ".------------------- DOCK -------------------.", blue);
+    text_at(20, 22, "[@] Finder   [>] Terminal   [#] Monitor", white);
+    text_at(23, 23, "[$] Apps   [*] Settings   [!] Power", silver);
     vga_set_cursor(0, 24);
 }
 

@@ -235,14 +235,14 @@ static void cmd_help(void) {
     vga_set_color(VGA_COLOR_WHITE, themes[theme_index].bg);
     vga_printf("Available ThreadOS commands:\n");
     vga_set_color(themes[theme_index].fg, themes[theme_index].bg);
-    vga_printf("  desktop / workspace / start - open the Windows-style THREAD Desktop\n");
+    vga_printf("  desktop / workspace / home - open the macOS-inspired THREAD Workspace\n");
     vga_printf("  apps / launcher     - open the real text-mode app launcher\n");
     vga_printf("  files               - open the THREAD Files view\n");
     vga_printf("  monitor             - open live scheduler/memory monitor\n");
     vga_printf("  status              - show subsystem health status\n");
     vga_printf("  settings / theme    - open settings and personalization\n");
     vga_printf("  theme next          - cycle theme and return to desktop\n");
-    vga_printf("  open <app>          - open desktop, files, monitor, apps, or settings\n");
+    vga_printf("  open <app>          - open workspace, finder, terminal, monitor, apps, or settings\n");
     vga_printf("  help                - show this command list\n");
     vga_printf("  threads / ps        - list all threads and their live states\n");
     vga_printf("  spawn <name> [prio] - launch a background worker thread (prio 0-3)\n");
@@ -316,7 +316,7 @@ static void dispatch(int argc, char *argv[]) {
     else if (strcmp(cmd, "bench") == 0 || strcmp(cmd, "stress") == 0) cmd_bench();
     else if (strcmp(cmd, "mem") == 0)         cmd_mem();
     else if (strcmp(cmd, "about") == 0)       cmd_about();
-    else if (strcmp(cmd, "desktop") == 0 || strcmp(cmd, "workspace") == 0 || strcmp(cmd, "start") == 0) {
+    else if (strcmp(cmd, "desktop") == 0 || strcmp(cmd, "workspace") == 0 || strcmp(cmd, "start") == 0 || strcmp(cmd, "home") == 0) {
         desktop_draw();
         serial_puts("[desktop] workspace dashboard ready\n");
     }
@@ -349,10 +349,11 @@ static void dispatch(int argc, char *argv[]) {
     else if (strcmp(cmd, "open") == 0 && argc > 1) {
         if (strcmp(argv[1], "files") == 0) desktop_show_files();
         else if (strcmp(argv[1], "monitor") == 0) desktop_show_monitor();
+        else if (strcmp(argv[1], "terminal") == 0) { vga_clear(); vga_set_cursor(0, 0); }
         else if (strcmp(argv[1], "apps") == 0) desktop_show_apps();
         else if (strcmp(argv[1], "settings") == 0) desktop_show_settings();
         else if (strcmp(argv[1], "desktop") == 0) desktop_draw();
-        else vga_printf("Unknown app '%s'. Try: files, monitor, apps, desktop\n", argv[1]);
+        else vga_printf("Unknown app '%s'. Try: finder, terminal, monitor, apps, desktop\n", argv[1]);
     }
     else if (strcmp(cmd, "clear") == 0) {
         vga_clear();
